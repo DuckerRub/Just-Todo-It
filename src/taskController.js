@@ -40,9 +40,13 @@ export const taskMethods = (function () {
 
     const editTask = function (projectId, taskId, title, description = "", duedate = "", priority = "") {
         const project = projectMethods.fetchProject(projectId);
-        const index = project.tasks.findIndex(e => e.id === taskId)
-        if (!project || index === -1) {
-            console.log("Project and/or task don't exist");
+        if (!project) {
+            console.log("Project doesn't exist");
+            return;
+        }
+        const index = project.tasks.findIndex(e => e.id === taskId);
+        if (index === -1) {
+            console.log("Task doesn't exist");
             return;
         }
         project.tasks[index].title = title;
