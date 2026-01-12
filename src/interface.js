@@ -1,9 +1,8 @@
 import "./styles.css";
 import {projectMethods} from "./projectController";
-import "./taskController";
+import { taskMethods } from "./taskController";
 
 const projects = (function () {
-
     const fetchProjects = function () {
         return projectMethods.fetchProjects();
     }
@@ -20,22 +19,25 @@ const projects = (function () {
         projectMethods.editProjectTitle(projectId, newTitle);
     }
 
-    const addTaskToProject = function (projectId, taskObject) {
-        projectMethods.addTaskToProject(projectId, taskObject)
-    }
-
-    return {addProject, fetchProjects, deleteProject, editProjectTitle, addTaskToProject};
+    return {addProject, fetchProjects, deleteProject, editProjectTitle};
 
 })();
 
 const tasks = (function () {
-    //fetch all tasks
 
-    //add task 
+    const addTask = function (projectId, title, description, duedate, priority) {
+        taskMethods.addTask(projectId, title, description, duedate, priority)
+    }
 
-    //edit task
+    const deleteTask = function (projectId, taskId) {
+        taskMethods.deleteTask(projectId, taskId)
+    }
 
-    //delete task
+    const editTask = function (projectId, taskId, title, description, duedate, priority) {
+        taskMethods.editTask(projectId, taskId, title, description, duedate, priority)
+    }
+
+    return {addTask, deleteTask, editTask}
 
 })();
 
@@ -50,11 +52,9 @@ const initializeDefaultProject = (function name(params) {
 // button just for easy testing
 const button = document.querySelector("button");
 button.addEventListener("click", () => {
-    projects.addTaskToProject("PROJECT_d1dd27f2-d3f0-48a1-8b67-c5ca305032f1",
-        {title: "test",
-        description: "testing test"
-        }
-    );
+    // tasks.addTask("PROJECT_bea2247b-79fa-4020-b764-4b096a26d529", "test123123213", "description123123", new Date(), "high")
+    // tasks.deleteTask("PROJECT_bea2247b-79fa-4020-b764-4b096a26d529", "TASK_4f40c1a0-ca4a-4748-a6ac-e5136f7baacf")
+    tasks.editTask("PROJECT_bea2247b-79fa-4020-b764-4b096a26d529", "TASK_3d62c697-42cd-44e0-ae71-911688a1a2f8", "777", "77777", new Date(), "777")
 })
 
 // TODO - How to make this more adherent to SOLID? 

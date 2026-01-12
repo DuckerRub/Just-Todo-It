@@ -39,6 +39,14 @@ export const projectMethods = (function () {
         }
     }
 
+    const fetchProject = function (projectId){
+        const storedProject = localStorage.getItem(projectId);
+        if (!storedProject) {
+            console.log("Project doesn't exist");
+            return null;
+        }
+        return JSON.parse(storedProject);
+    }
     
     const fetchProjects = function (){
         const projects = Object.keys(localStorage);
@@ -46,7 +54,7 @@ export const projectMethods = (function () {
     }
     
     const addTaskToProject = function(projectId, taskObject){
-        const project = JSON.parse(localStorage.getItem(projectId));
+        const project = fetchProject(projectId);
         if (!project) {
             console.log("Project doesn't exist")
         }else {
@@ -55,6 +63,15 @@ export const projectMethods = (function () {
         }
     }
 
-    return {addProject, fetchProjects, deleteProject, editProjectTitle, addTaskToProject};
+    const updateProject = function(projectId, projectObject){
+        const project = fetchProject(projectId);
+        if (!project) {
+            console.log("Project doesn't exist")
+        }else {
+            localStorage.setItem(projectId, JSON.stringify(projectObject));
+        }
+    }
+
+    return {addProject, fetchProject, fetchProjects, deleteProject, editProjectTitle, addTaskToProject, updateProject};
     
 })();
