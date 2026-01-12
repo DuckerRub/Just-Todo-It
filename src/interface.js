@@ -1,7 +1,6 @@
 import "./styles.css";
 import {projectMethods} from "./projectController";
 import { taskMethods } from "./taskController";
-import "./taskController";
 
 const projects = (function () {
     const fetchProjects = function () {
@@ -55,7 +54,7 @@ const button = document.querySelector("button");
 button.addEventListener("click", () => {
     // tasks.addTask("PROJECT_bea2247b-79fa-4020-b764-4b096a26d529", "test123123213", "description123123", new Date(), "high")
     // tasks.deleteTask("PROJECT_bea2247b-79fa-4020-b764-4b096a26d529", "TASK_4f40c1a0-ca4a-4748-a6ac-e5136f7baacf")
-    tasks.editTask("PROJECT_bea2247b-79fa-4020-b764-4b096a26d529", "TASK_82d7ae0f-4287-46e1-b7ca-269f6c9257d4", "5456nnnn", "nddddddww", new Date(), "low")
+    tasks.editTask("PROJECT_bea2247b-79fa-4020-b764-4b096a26d529", "TASK_3d62c697-42cd-44e0-ae71-911688a1a2f8", "777", "77777", new Date(), "777")
 })
 
 // TODO - How to make this more adherent to SOLID? 

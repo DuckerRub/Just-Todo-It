@@ -22,13 +22,17 @@ class Task {
 
 export const taskMethods = (function () {
 
-    const addTask = function (projectId, title, description = "", duedate = "", priority = "") {
+    const addTask = function (projectId, title, description = "", duedate = new Date(), priority = "") {
         const task = new Task (title, description, duedate, priority);
         projectMethods.addTaskToProject(projectId, task);
     }
 
     const deleteTask = function (projectId, taskId) {
         const project = projectMethods.fetchProject(projectId);
+        if (!project) {
+            console.log("Project doesn't exist");
+            return;
+        }
         project.tasks = project.tasks.filter(e => e.id != taskId);
         projectMethods.updateProject(projectId, project);
     }
@@ -37,9 +41,13 @@ export const taskMethods = (function () {
     const editTask = function (projectId, taskId, title, description = "", duedate = "", priority = "") {
         const project = projectMethods.fetchProject(projectId);
         const index = project.tasks.findIndex(e => e.id === taskId)
+        if (!project || index === -1) {
+            console.log("Project and/or task don't exist");
+            return;
+        }
         project.tasks[index].title = title;
         project.tasks[index].description = description;
-        project.tasks[index].duedate = duedate;
+        project.tasks[index].duedate = format(duedate, "yyyy-MM-dd");
         project.tasks[index].priority = priority;
         projectMethods.updateProject(projectId, project);
     }
