@@ -1,17 +1,14 @@
 import { format } from "date-fns";
-import "./projectController";
+import {projectMethods} from "./projectController";
 
-// Task Class
 class Task {
-    constructor(title, description = "", duedate = "", priority = "", status = "") {
+    constructor(title, description, duedate, priority) {
         this.id = this.generateId();
         this.title = title;
         this.description = description;
         this.duedate = format(duedate, "yyyy-MM-dd");
         this.priority = priority;
-        this.status = status;
-        // Project reference
-        // TODO Add checklist last
+        // TODO Add checklist last as a way to experience how easy it is to maintain your code
     }
 
     getData(){
@@ -19,34 +16,34 @@ class Task {
     }
 
     generateId () {
-            return self.crypto.randomUUID();
+            return "TASK_" + self.crypto.randomUUID();
         };
 }
 
+export const taskMethods = (function () {
+
+    const addTask = function (projectId, title, description = "", duedate = "", priority = "") {
+        const task = new Task (title, description, duedate, priority);
+        projectMethods.addTaskToProject(projectId, task);
+    }
+
+    const deleteTask = function (projectId, taskId) {
+        const project = projectMethods.fetchProject(projectId);
+        project.tasks = project.tasks.filter(e => e.id != taskId);
+        projectMethods.updateProject(projectId, project);
+    }
 
 
-const taskMethods = (function () {
-    // add task
+    const editTask = function (projectId, taskId, title, description = "", duedate = "", priority = "") {
+        const project = projectMethods.fetchProject(projectId);
+        const index = project.tasks.findIndex(e => e.id === taskId)
+        project.tasks[index].title = title;
+        project.tasks[index].description = description;
+        project.tasks[index].duedate = duedate;
+        project.tasks[index].priority = priority;
+        projectMethods.updateProject(projectId, project);
+    }
 
-    // edit task
-
-    // delete task
-
-    // fetch all tasks from project
+    return {addTask, deleteTask, editTask};
 
 })();
-
-
-// Local storage PoC
-    // const task = new Task("test", "2026-01-30");
-    // const taskJson = JSON.stringify(task);
-    // localStorage.setItem(task.getTitle(), taskJson);
-    // const getTaskData = JSON.parse(localStorage.getItem(task.getTitle()));
-    // console.log(getTaskData);
-    // // Gotta reconstruct shit
-    // const getTaskDataReconstructed = new Task (
-    //     getTaskData.title,
-    //     getTaskData.duedate
-    // )
-    // console.log(getTaskDataReconstructed.getTitle());
-
