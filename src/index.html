@@ -14,22 +14,23 @@
             Workspace: Default
         </div>
 
-        <div class="add-todo-component-collapsed">
-            <div>Add Todo</div>
+        <div class="add-todo-component" onclick="expand ()">
+            <div class="add-todo-component-cta">Add Todo</div>
+            <form class="add-todo-component-form">
+                    <input type="text" name="title" placeholder="Title" id="title" title="Title is mandatory">
+                    <textarea name="description" id="description" rows="5" cols="33">
+                    </textarea>
+                    <input type="date" name="duedate" placeholder="Duedate" id="duedate">
+                    <select name="priority" id="priority">
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                    <button type="button" id="cancel-todo">Cancel</button>
+                    <button type="submit" id="add-todo">Add</button>
+    
+            </form>
         </div>
-        <!-- <form class="add-todo-component">
-                <input type="text" name="title" placeholder="Title" id="title" title="Title is mandatory">
-                <textarea name="description" id="description" rows="5" cols="33">
-                </textarea>
-                <input type="date" name="duedate" placeholder="Duedate" id="duedate">
-                <select name="priority" id="priority">
-                    <option value="low">Low</option>
-                    <option value="medium">Medium</option>
-                    <option value="high">High</option>
-                </select>
-                <button type="submit" id="add-todo">Add</button>
-
-        </form> -->
 
         <div class="todo-list">
             <div class="todo-item">
@@ -57,5 +58,16 @@
         <div class="view-completed-items">View completed items</div>
 
     </div>
+
+    <script>
+        // TODO: move this to correct place
+        function expand () {
+            const expanded = document.querySelector('.add-todo-component');
+            const cta = document.querySelector('.add-todo-component-cta');
+            expanded.classList.add("expanded");
+            cta.classList.add("hidden-cta");
+        }
+    </script>
+
 </body>
 </html>
