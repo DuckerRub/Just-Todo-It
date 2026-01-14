@@ -4,10 +4,58 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Just Todo It</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class ="container">
-        <button>Test</button>
+        <!-- <button>Test</button> -->
+
+        <div class="workspace-selector">
+            Workspace: Default
+        </div>
+
+        <div class="add-todo-component-collapsed">
+            <div>Add Todo</div>
+        </div>
+        <!-- <form class="add-todo-component">
+                <input type="text" name="title" placeholder="Title" id="title" title="Title is mandatory">
+                <textarea name="description" id="description" rows="5" cols="33">
+                </textarea>
+                <input type="date" name="duedate" placeholder="Duedate" id="duedate">
+                <select name="priority" id="priority">
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                </select>
+                <button type="submit" id="add-todo">Add</button>
+
+        </form> -->
+
+        <div class="todo-list">
+            <div class="todo-item">
+                <div class="complete-todo-action"></div>
+                <div class="todo-title">Wash car</div>
+                <div class="sub-todo-item">
+                    <div class="todo-duedate">01/02/2026</div>
+                    <div class="todo-priority">High</div>
+                </div>
+            </div>
+
+            <div class="todo-item">
+                <div class="complete-todo-action"></div>
+                <div class="todo-title">Wash car</div>
+                <div class="sub-todo-item">
+                    <div class="todo-duedate">01/02/2026</div>
+                    <div class="todo-priority">High</div>
+                </div>
+            </div>
+
+        </div>
+
+        
+
+        <div class="view-completed-items">View completed items</div>
+
     </div>
 </body>
 </html>

@@ -1,3 +1,90 @@
-body {
-    background-color: lightgray;
+div {
+    border: 1px solid black;
+}
+
+.container {
+    display: grid;
+    gap: 2rem;
+    justify-content: center;
+    grid-template-columns: 70%;
+}
+
+.add-todo-component-collapsed {
+    display: flex;
+    padding: 0 2rem;
+}
+
+.add-todo-component-collapsed div {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.add-todo-component {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    /* grid-template-rows: repeat(4, 1fr);  IMPLICIT */
+    gap: 10px;
+    padding: 0 1rem;
+}
+
+.add-todo-component #title {
+    grid-column: 1/3;
+    grid-row: 1/2;
+}
+
+.add-todo-component #description {
+    grid-column: 1/2;
+    grid-row: 2/4;
+}
+
+.add-todo-component #duedate {
+    grid-column: 2/3;
+    grid-row: 2/3;
+}
+
+.add-todo-component #priority {
+    grid-column: 2/3;
+    grid-row: 3/4;
+}
+
+.add-todo-component #add-todo {
+    grid-column: 2/3;
+    grid-row: 4/5;
+}
+
+.workspace-selector{
+    justify-self: end;
+}
+
+.todo-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.todo-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    gap: 1rem;
+}
+.complete-todo-action {
+    flex: 1 0 20px;
+    height: 50px;
+}
+
+.todo-title {
+    flex: 8 1 auto;
+}
+
+.sub-todo-item {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.view-completed-items {
+    justify-self: center;
 }
