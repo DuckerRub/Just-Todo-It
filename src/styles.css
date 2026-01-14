@@ -3,10 +3,35 @@ div {
 }
 
 .container {
-    display: grid;
+    display: flex;
+    flex-direction: column;
     gap: 2rem;
-    justify-content: center;
-    grid-template-columns: 70%;
+    min-height: 90vh;
+    padding-top: 70px;
+}
+
+.workspace-selector {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    height: 50px;
+    background-color: aqua;
+}
+
+.workspace-item {
+    padding: 1rem;
+    box-sizing: border-box;
+    min-width: 10rem;
+}
+
+.workspace-item.selected {
+    height: 50px;
+}
+
+.workspace-item.hidden {
+    display: none;
 }
 
 .add-todo-component {
@@ -69,9 +94,7 @@ div {
     grid-row: 4/5;
 }
 
-.workspace-selector{
-    justify-self: end;
-}
+
 
 .todo-list {
     display: flex;
@@ -102,5 +125,5 @@ div {
 }
 
 .view-completed-items {
-    justify-self: center;
+    align-self: center;
 }
