@@ -35,7 +35,21 @@
         </div>
 
         <div class="todo-list">
-            <div class="todo-item">
+
+            <div class="todo-item expanded" id="modal">
+                <div class="todo-item" id="modal-content">
+                    <div id="modal-close" onclick="closeModal()">&times;</div>
+                    <div class="complete-todo-action"></div>
+                    <div class="todo-title">Modal of wash car</div>
+                    <div class="sub-todo-item">
+                        <div class="todo-duedate">01/02/2026</div>
+                        <div class="todo-priority">High</div>
+                    </div>
+                    <div class="todo-description">Description Descriptio nDescriptionDescriptionDesc riptionDescriptionDesc riptionDescriptionDescription Description DescriptionDescription DescriptionDescription</div>
+                </div>
+            </div>
+
+            <div class="todo-item" onclick="openModal()">
                 <div class="complete-todo-action"></div>
                 <div class="todo-title">Wash car</div>
                 <div class="sub-todo-item">
@@ -57,7 +71,7 @@
 
         
 
-        <div class="view-completed-items">View completed items</div>
+        <!-- <div class="view-completed-items">View completed items</div> -->
 
     </div>
 
@@ -68,6 +82,16 @@
             const cta = document.querySelector('.add-todo-component-cta');
             expanded.classList.add("expanded");
             cta.classList.add("hidden-cta");
+        }
+
+        function openModal () {
+            const modal = document.getElementById("modal");
+            modal.style.display = "block"
+        }
+
+        function closeModal () {
+            const close = document.getElementById("close-modal");
+            modal.style.display = "none";
         }
     </script>
 
