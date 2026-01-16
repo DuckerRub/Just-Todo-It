@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   mode: "development",
-  entry: "./src/interface.js",
+  entry: "./src/api.js",
   output: {
     filename: "main.js",
     path: path.resolve(__dirname, "dist"),

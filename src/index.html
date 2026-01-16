@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Just Todo It</title>
-    <link rel="stylesheet" href="styles.css">
+    <!-- <link rel="stylesheet" href="styles.css"> -->
 </head>
 <body>
     <div class ="container">
-        <!-- <button>Test</button> -->
+        <!-- <button id="test-button">Test</button> -->
 
         <div class="workspace-selector">
             <div class="workspace-item selected">My workspace</div>
@@ -19,17 +19,17 @@
         <div class="add-todo-component" onclick="expand ()">
             <div class="add-todo-component-cta">Add Todo</div>
             <form class="add-todo-component-form">
-                    <input type="text" name="title" placeholder="Title" id="title" title="Title is mandatory">
-                    <textarea name="description" id="description" rows="5" cols="33">
+                    <input type="text" name="title" placeholder="Title" id="title-form" title="Title is mandatory">
+                    <textarea name="description" id="description-form" rows="5" cols="33">
                     </textarea>
-                    <input type="date" name="duedate" placeholder="Duedate" id="duedate">
-                    <select name="priority" id="priority">
+                    <input type="date" name="duedate" placeholder="Duedate" id="duedate-form">
+                    <select name="priority" id="priority-form">
                         <option value="low">Low</option>
                         <option value="medium">Medium</option>
                         <option value="high">High</option>
                     </select>
+                    <button type="submit" id="submit-todo-button">Add</button>
                     <button type="button" id="cancel-todo">Cancel</button>
-                    <button type="submit" id="add-todo">Add</button>
     
             </form>
         </div>
@@ -49,7 +49,7 @@
                 </div>
             </div>
 
-            <div class="todo-item" onclick="openModal()">
+            <!-- <div class="todo-item" onclick="openModal()">
                 <div class="complete-todo-action"></div>
                 <div class="todo-title">Wash car</div>
                 <div class="sub-todo-item">
@@ -65,7 +65,7 @@
                     <div class="todo-duedate">01/02/2026</div>
                     <div class="todo-priority">High</div>
                 </div>
-            </div>
+            </div> -->
 
         </div>
 
