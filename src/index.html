@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class ="container">
-        <!-- <button id="test-button">Test</button> -->
+        <button id="test-button">Test (currently clearing tasks)</button>
 
         <div class="workspace-selector">
             <div class="workspace-item selected">My workspace</div>
@@ -16,9 +16,10 @@
             <div class="workspace-item hidden add-workspace">Add workspace</div>
         </div>
 
-        <div class="add-todo-component" onclick="expand ()">
+        <div class="add-todo-component" id="add-todo-component">
             <div class="add-todo-component-cta">Add Todo</div>
             <form class="add-todo-component-form">
+                    <div id="close-todo-form">X</div>
                     <input type="text" name="title" placeholder="Title" id="title-form" title="Title is mandatory">
                     <textarea name="description" id="description-form" rows="5" cols="33">
                     </textarea>
@@ -29,71 +30,14 @@
                         <option value="high">High</option>
                     </select>
                     <button type="submit" id="submit-todo-button">Add</button>
-                    <button type="button" id="cancel-todo">Cancel</button>
-    
             </form>
         </div>
 
-        <div class="todo-list">
+        <div class="view-completed-items" id="view-completed-items" data-completed-status=false >View completed items</div>
 
-            <div class="todo-item expanded" id="modal">
-                <div class="todo-item" id="modal-content">
-                    <div id="modal-close" onclick="closeModal()">&times;</div>
-                    <div class="complete-todo-action"></div>
-                    <div class="todo-title">Modal of wash car</div>
-                    <div class="sub-todo-item">
-                        <div class="todo-duedate">01/02/2026</div>
-                        <div class="todo-priority">High</div>
-                    </div>
-                    <div class="todo-description">Description Descriptio nDescriptionDescriptionDesc riptionDescriptionDesc riptionDescriptionDescription Description DescriptionDescription DescriptionDescription</div>
-                </div>
-            </div>
-
-            <!-- <div class="todo-item" onclick="openModal()">
-                <div class="complete-todo-action"></div>
-                <div class="todo-title">Wash car</div>
-                <div class="sub-todo-item">
-                    <div class="todo-duedate">01/02/2026</div>
-                    <div class="todo-priority">High</div>
-                </div>
-            </div>
-
-            <div class="todo-item">
-                <div class="complete-todo-action"></div>
-                <div class="todo-title">Wash car</div>
-                <div class="sub-todo-item">
-                    <div class="todo-duedate">01/02/2026</div>
-                    <div class="todo-priority">High</div>
-                </div>
-            </div> -->
-
+        <div class="todo-list" id="todo-list">
         </div>
 
-        
-
-        <!-- <div class="view-completed-items">View completed items</div> -->
-
     </div>
-
-    <script>
-        // TODO: move this to correct place
-        function expand () {
-            const expanded = document.querySelector('.add-todo-component');
-            const cta = document.querySelector('.add-todo-component-cta');
-            expanded.classList.add("expanded");
-            cta.classList.add("hidden-cta");
-        }
-
-        function openModal () {
-            const modal = document.getElementById("modal");
-            modal.style.display = "block"
-        }
-
-        function closeModal () {
-            const close = document.getElementById("close-modal");
-            modal.style.display = "none";
-        }
-    </script>
-
 </body>
 </html>

@@ -1,10 +1,11 @@
 import "./styles.css";
-import {projectMethods} from "./projectController";
+import { projectMethods } from "./projectController";
 import { taskMethods } from "./taskController";
 import "./domController";
+import { DOMController } from "./domController";
 
 // TODO: rename to workspace
-const projects = (function () {
+export const projects = (function () {
     const fetchProjects = function () {
         return projectMethods.fetchProjects();
     }
@@ -21,7 +22,15 @@ const projects = (function () {
         projectMethods.editProjectTitle(projectId, newTitle);
     }
 
-    return {addProject, fetchProjects, deleteProject, editProjectTitle};
+    const fetchProjectTasks = function (projectId) {
+        return projectMethods.fetchProjectTasks(projectId);
+    }
+
+    const fetchProjectTask = function (projectId, taskId) {
+        return projectMethods.fetchProjectTask(projectId, taskId);
+    }
+
+    return {addProject, fetchProjects, fetchProjectTasks, fetchProjectTask, deleteProject, editProjectTitle};
 
 })();
 
@@ -39,7 +48,11 @@ export const tasks = (function () {
         taskMethods.editTask(projectId, taskId, title, description, duedate, priority)
     }
 
-    return {addTask, deleteTask, editTask}
+    const completeTask = function (projectId, taskId) {
+        taskMethods.completeTask(projectId, taskId)
+    }
+
+    return {addTask, deleteTask, editTask, completeTask}
 
 })();
 
@@ -48,14 +61,11 @@ const initializeDefaultProject = (function name(params) {
     if (projects.fetchProjects().length === 0) {
             projects.addProject("My workspace");
     }
+    DOMController.populateTodoList("PROJECT_622b9c87-e270-41b7-9469-3302a1d918b8", false);
 })();
 
 
-// button just for easy testing
-// const button = document.querySelector("#test-button");
-// button.addEventListener("click", () => {
-//     // tasks.addTask("PROJECT_bea2247b-79fa-4020-b764-4b096a26d529", "test123123213", "description123123", new Date(), "high")
-// })
+
 
 // TODO - How to make this more adherent to SOLID? 
 // TODO I don't love that the methods here do 2 things: trigger DOM changes and data changes

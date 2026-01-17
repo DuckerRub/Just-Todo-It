@@ -8,6 +8,7 @@ class Task {
         this.description = description;
         this.duedate = format(duedate, "yyyy-MM-dd");
         this.priority = priority;
+        this.completed = false;
         // TODO Add checklist last as a way to experience how easy it is to maintain your code
     }
 
@@ -44,6 +45,7 @@ export const taskMethods = (function () {
             console.log("Project doesn't exist");
             return;
         }
+
         const index = project.tasks.findIndex(e => e.id === taskId);
         if (index === -1) {
             console.log("Task doesn't exist");
@@ -56,6 +58,22 @@ export const taskMethods = (function () {
         projectMethods.updateProject(projectId, project);
     }
 
-    return {addTask, deleteTask, editTask};
+    const completeTask = function (projectId, taskId) {
+        const project = projectMethods.fetchProject(projectId);
+        if (!project) {
+            console.log("Project doesn't exist");
+            return;
+        }
+
+        const index = project.tasks.findIndex(e => e.id === taskId);
+        if (index === -1) {
+            console.log("Task doesn't exist");
+            return;
+        }
+        project.tasks[index].completed = true;
+        projectMethods.updateProject(projectId, project); 
+    }
+
+    return {addTask, deleteTask, editTask, completeTask};
 
 })();
