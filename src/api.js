@@ -48,11 +48,11 @@ export const tasks = (function () {
         taskMethods.editTask(projectId, taskId, title, description, duedate, priority)
     }
 
-    const completeTask = function (projectId, taskId) {
-        taskMethods.completeTask(projectId, taskId)
+    const changeTaskStatus = function (projectId, taskId) {
+        taskMethods.changeTaskStatus(projectId, taskId)
     }
 
-    return {addTask, deleteTask, editTask, completeTask}
+    return {addTask, deleteTask, editTask, changeTaskStatus}
 
 })();
 
@@ -61,6 +61,7 @@ const initializeDefaultProject = (function name(params) {
     if (projects.fetchProjects().length === 0) {
             projects.addProject("My workspace");
     }
+    tasks.addTask("PROJECT_622b9c87-e270-41b7-9469-3302a1d918b8","test", "asdhuasdhoausdh", "2026-01-30", "low");
     DOMController.populateTodoList("PROJECT_622b9c87-e270-41b7-9469-3302a1d918b8", false);
 })();
 
@@ -68,4 +69,3 @@ const initializeDefaultProject = (function name(params) {
 
 
 // TODO - How to make this more adherent to SOLID? 
-// TODO I don't love that the methods here do 2 things: trigger DOM changes and data changes

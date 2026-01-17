@@ -73,33 +73,33 @@ div {
 
 .add-todo-component-form #close-todo-form {
     grid-column: 1/3;
+    grid-row: 1/2;
     justify-self: end;
-    /* grid-row: 4/5; */
 }
 
-.add-todo-component-form #title {
+.add-todo-component-form #title-form {
     grid-column: 1/3;
-    /* grid-row: 2/3; */
+    grid-row: 2/3;
 }
 
-.add-todo-component-form #description {
+.add-todo-component-form #description-form {
     grid-column: 1/2;
-    grid-row: 2/4;
+    grid-row: 3/5;
 }
 
-.add-todo-component-form #duedate {
+.add-todo-component-form #duedate-form {
     grid-column: 2/3;
-    /* grid-row: 2/3; */
+    grid-row: 3/4;
 }
 
-.add-todo-component-form #priority {
+.add-todo-component-form #priority-form {
     grid-column: 2/3;
-    /* grid-row: 3/4; */
+    grid-row: 4/5;
 }
 
 .add-todo-component-form #submit-todo-button {
-    grid-column: 1/3;
-    /* grid-row: 4/5; */
+    grid-column: 2/3;
+    grid-row: 5/6;
     justify-self: end;
 }
 
@@ -154,15 +154,22 @@ div {
   border: 1px solid #888;
   width: 80%; /* Could be more or less, depending on screen size */
   display: grid;
-  grid-template-columns: var(--complete-todo-action-min-width) 1fr 6rem;
+  grid-template-columns: var(--complete-todo-action-min-width) 1fr 8rem;
+}
+
+#modal-content #modal-close {
+    justify-self: center;
 }
 
 #modal-content .todo-description {
     grid-column: 1/3;
 }
 
-#modal-content #modal-close {
-    justify-self: center;
+
+#modal-content .todo-delete-button,
+#modal-content .todo-save-button {
+    grid-column: 1/4;
+    justify-self: end;
 }
 
 
