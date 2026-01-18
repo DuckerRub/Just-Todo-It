@@ -1,8 +1,5 @@
-import "./styles.css";
 import { projectMethods } from "./projectController";
 import { taskMethods } from "./taskController";
-import "./domController";
-import { DOMController } from "./domController";
 
 // TODO: rename to workspace
 export const projects = (function () {
@@ -11,7 +8,7 @@ export const projects = (function () {
     }
 
     const addProject = function (title){
-        projectMethods.addProject(title);
+        return projectMethods.addProject(title);
     }
 
     const deleteProject = function (projectId) {
@@ -22,6 +19,7 @@ export const projects = (function () {
         projectMethods.editProjectTitle(projectId, newTitle);
     }
 
+    // TODO remove this and use the OBjects one
     const fetchProjectTasks = function (projectId) {
         return projectMethods.fetchProjectTasks(projectId);
     }
@@ -30,7 +28,16 @@ export const projects = (function () {
         return projectMethods.fetchProjectTask(projectId, taskId);
     }
 
-    return {addProject, fetchProjects, fetchProjectTasks, fetchProjectTask, deleteProject, editProjectTitle};
+    const fetchProjectsObjects = function () {
+        const projectsArray = projectMethods.fetchProjects();
+        const projectsObjectArray = [];
+        projectsArray.forEach(element => {
+            projectsObjectArray.push(projectMethods.fetchProject(element));
+        });
+        return projectsObjectArray;
+    }
+
+    return {addProject, fetchProjects, fetchProjectTasks, fetchProjectsObjects, fetchProjectTask, deleteProject, editProjectTitle};
 
 })();
 
@@ -56,16 +63,5 @@ export const tasks = (function () {
 
 })();
 
-// Initialize default project
-const initializeDefaultProject = (function name(params) {
-    if (projects.fetchProjects().length === 0) {
-            projects.addProject("My workspace");
-    }
-    tasks.addTask("PROJECT_622b9c87-e270-41b7-9469-3302a1d918b8","test", "asdhuasdhoausdh", "2026-01-30", "low");
-    DOMController.populateTodoList("PROJECT_622b9c87-e270-41b7-9469-3302a1d918b8", false);
-})();
-
-
-
-
-// TODO - How to make this more adherent to SOLID? 
+// TODO - How to make this more adherent to SOLID?
+// TODO make projects and tasks about crud, and the api about logic? But that creates dependency, at least api is currently only a proxy and each controller is independent-ish

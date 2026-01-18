@@ -19,6 +19,7 @@ export const projectMethods = (function () {
     const addProject = function (title) {
         const project = new Project(title);
         localStorage.setItem(project.id, JSON.stringify(project));
+        return project.id;
     }
 
     const deleteProject = function(projectId){

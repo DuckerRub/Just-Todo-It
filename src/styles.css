@@ -14,7 +14,7 @@ div {
     flex-direction: column;
     gap: 2rem;
     min-height: 90vh;
-    padding-top: 70px;
+    padding-top: 250px;
 }
 
 .workspace-selector {
@@ -23,22 +23,20 @@ div {
     right: 10px;
     display: flex;
     flex-direction: column;
-    height: 50px;
-    background-color: aqua;
+    max-height: 200px;
+    overflow: auto;
 }
 
-.workspace-item {
+.workspace-item,
+.add-workspace-item {
     padding: 1rem;
     box-sizing: border-box;
     min-width: 10rem;
+    flex: 0 0 50px;
 }
 
-.workspace-item.selected {
-    height: 50px;
-}
-
-.workspace-item.hidden {
-    display: none;
+.selectedWorkspace {
+    background-color: teal;
 }
 
 .add-todo-component {

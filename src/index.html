@@ -8,12 +8,12 @@
 </head>
 <body>
     <div class ="container">
-        <button id="test-button">Test (currently clearing tasks)</button>
 
-        <div class="workspace-selector">
-            <div class="workspace-item selected">My workspace</div>
-            <div class="workspace-item hidden">New workspace</div>
-            <div class="workspace-item hidden add-workspace">Add workspace</div>
+        <div class="workspace-selector" id="workspace-selector">
+                <form class="add-workspace-item" id="add-workspace-form">
+                    <input type="text" placeholder="Title" id="workspace-title-form">
+                    <button type="submit" id="submit-workspace-button">Add</button>
+                </form>
         </div>
 
         <div class="add-todo-component" id="add-todo-component">
@@ -37,6 +37,8 @@
 
         <div class="todo-list" id="todo-list">
         </div>
+
+        <button id="test-button">Test (currently clearing tasks)</button>
 
     </div>
 </body>

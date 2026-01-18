@@ -1,17 +1,25 @@
+import "./styles.css";
 import {tasks, projects} from "./api";
-const globalProjectId = "PROJECT_622b9c87-e270-41b7-9469-3302a1d918b8";
+
+// TODO my frontend is absolute dog shit
 
 export const DOMController = (function () {
 
+    const workspaceSelector = document.getElementById("workspace-selector");
     const todoForm = document.querySelector(".add-todo-component-form");
     const todoList = document.getElementById("todo-list");
     const container = document.querySelector(".container");
     const addTodoForm = document.getElementById("add-todo-component");
     const viewCompleted = document.getElementById("view-completed-items");
     
+
+    const getSelectedWorkspaceId = function () {
+        const selectedProject = document.querySelector(".selectedWorkspace");
+        return selectedProject.dataset.projectId;
+    }
+
     const addTodo = function () {
-        //TODO: properly fetch current selected project ID
-        const projectId = globalProjectId;
+        const projectId = getSelectedWorkspaceId();
 
         const titleForm = document.getElementById("title-form");
         const descriptionForm = document.getElementById("description-form");
@@ -29,8 +37,6 @@ export const DOMController = (function () {
         descriptionForm.value = "";
         duedateForm.value = "";
         priorityForm.value = "low";
-
-        //TODO: close form
         
 
     }
@@ -49,7 +55,7 @@ export const DOMController = (function () {
         taskArray.forEach(element => {
             const newTodoItem = document.createElement("div");
             newTodoItem.classList.add("todo-item");
-            newTodoItem.dataset.projectId = globalProjectId;
+            newTodoItem.dataset.projectId = projectId;
             newTodoItem.dataset.taskId = element.id;
             // newTodoItem.dataset.taskStatus = element.taskStatus;
 
@@ -230,6 +236,63 @@ export const DOMController = (function () {
         modal.style.display = "block"
     }
 
+    const populateWorkspaceSelector = function () {
+
+        const projectsArray = projects.fetchProjectsObjects();
+
+        const workspaceSelector = document.getElementById("workspace-selector");
+
+        const children = Array.from(workspaceSelector.children);
+        children.forEach(child => {
+            if (!child.classList.contains("add-workspace-item")) {
+            workspaceSelector.removeChild(child);
+            }
+        });
+
+        projectsArray.forEach(e => {
+            const workspaceItem = document.createElement("div");
+            workspaceItem.classList.add("workspace-item");
+            workspaceItem.id = "workspace-item";
+            workspaceItem.textContent = e.title;
+            workspaceItem.dataset.projectId = e.id;
+            workspaceItem.addEventListener("click", e => {
+                // populateTodoList(e.id);
+            })
+
+            workspaceSelector.prepend(workspaceItem);
+        });
+    }
+
+    const addWorkspace = function (title) {
+        const projectId = projects.addProject(title);
+        populateWorkspaceSelector();
+        const newProject = document.querySelector(`.workspace-item[data-project-id="${projectId}"]`)
+        newProject.classList.add("selectedWorkspace");
+    }
+
+    const switchSelectedWorkspace = function (projectId) {
+        const selectedProject = document.querySelector(".selectedWorkspace");
+        selectedProject.classList.remove("selectedWorkspace")
+        populateTodoList(projectId);
+        const newSelectedProject = document.querySelector(`.workspace-item[data-project-id="${projectId}"]`)
+        newSelectedProject.classList.add("selectedWorkspace");
+    }
+
+    workspaceSelector.addEventListener("click", e => {
+        //TODO too ugly and hardcoded
+        if (e.target.id === "workspace-selector") {
+            console.log("open selector")
+        } else if (e.target.id === "workspace-item") {
+            switchSelectedWorkspace(e.target.dataset.projectId);
+        } else if (e.target.id === "submit-workspace-button") {
+            e.preventDefault();
+            const projectTitle = document.getElementById("workspace-title-form");
+            addWorkspace(projectTitle.value);
+            projectTitle.value = "";
+        }
+    })
+
+    // TODO separate event binding elsewhere, consider removing logic as well, what should a event binder do?
     addTodoForm.addEventListener("click", () => {
         const cta = document.querySelector('.add-todo-component-cta');
         const closeTodoForm = document.getElementById("close-todo-form");
@@ -245,11 +308,16 @@ export const DOMController = (function () {
     todoForm.addEventListener("submit", e => {
         e.preventDefault();
         addTodo();
+        const cta = document.querySelector('.add-todo-component-cta.hidden-cta');
+        const addTodoForm = document.querySelector(".add-todo-component.expanded");
+        cta.classList.remove("hidden-cta");
+        addTodoForm.classList.remove("expanded");
     });
 
     todoList.addEventListener("click", e => {
         const projectId = !e.target.parentNode.dataset.projectId ? e.target.dataset.projectId : e.target.parentNode.dataset.projectId;
         const taskId = !e.target.parentNode.dataset.taskId ? e.target.dataset.taskId : e.target.parentNode.dataset.taskId;
+        //TODO improve this if, and questions if this is really the way to go
         if (e.target.classList.contains("complete-todo-action")) {
             changeTaskStatus(projectId, taskId);
         } else {
@@ -262,7 +330,7 @@ export const DOMController = (function () {
         const status = viewCompleted.dataset.completedStatus === "false" ? false : true;
         
         viewCompleted.dataset.completedStatus = !status;
-        populateTodoList(globalProjectId);
+        populateTodoList(getSelectedWorkspaceId());
         if (status === false) {
             viewCompleted.textContent = "View uncompleted task";
         } else {
@@ -271,18 +339,28 @@ export const DOMController = (function () {
         
     });
 
-    return {populateTodoList};
+
+    return {populateTodoList, populateWorkspaceSelector, getSelectedWorkspaceId};
 
 })();
 
-
+// Initialize default project
+export const initialSetup = function () {
+    if (projects.fetchProjects().length === 0) {
+            projects.addProject("My workspace");
+        }
+    DOMController.populateWorkspaceSelector();
+    const selectedProject = document.querySelector(".workspace-item");
+    selectedProject.classList.add("selectedWorkspace")
+    DOMController.populateTodoList(DOMController.getSelectedWorkspaceId());
+};
 
 // button just for easy testing
 const button = document.getElementById("test-button");
 button.addEventListener("click", () => {
     console.log("listener working");
-    localStorage.setItem(globalProjectId, JSON.stringify({
-        id: globalProjectId,
+    localStorage.setItem(getSelectedWorkspaceId(), JSON.stringify({
+        id: getSelectedWorkspaceId(),
         title:"My workspace",
         tasks:[]
     }));
