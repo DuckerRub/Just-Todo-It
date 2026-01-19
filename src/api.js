@@ -7,6 +7,10 @@ export const projects = (function () {
         return projectMethods.fetchProjects();
     }
 
+    const fetchProject = function (projectId) {
+        return projectMethods.fetchProject(projectId);
+    }
+
     const addProject = function (title){
         return projectMethods.addProject(title);
     }
@@ -16,16 +20,32 @@ export const projects = (function () {
     }
 
     const editProjectTitle = function (projectId, newTitle) {
-        projectMethods.editProjectTitle(projectId, newTitle);
+        const projectObject = projectMethods.fetchProject(projectId);
+        if (!projectObject) {
+            console.log("Project doesn't exist")
+        }else {
+            projectObject.title = newTitle;
+            projectMethods.updateProject(projectId, projectObject);
+        }
     }
 
-    // TODO remove this and use the OBjects one
     const fetchProjectTasks = function (projectId) {
-        return projectMethods.fetchProjectTasks(projectId);
+        const project = projectMethods.fetchProject(projectId);
+        if (!project) {
+            console.log("Project doesn't exist")
+        }else {
+            return project.tasks;
+        }
     }
 
     const fetchProjectTask = function (projectId, taskId) {
-        return projectMethods.fetchProjectTask(projectId, taskId);
+        const project = projectMethods.fetchProject(projectId);
+        if (!project) {
+            console.log("Project doesn't exist")
+        }else {
+            const index = project.tasks.findIndex(e => e.id === taskId);
+            return project.tasks[index];
+        }
     }
 
     const fetchProjectsObjects = function () {
@@ -37,7 +57,7 @@ export const projects = (function () {
         return projectsObjectArray;
     }
 
-    return {addProject, fetchProjects, fetchProjectTasks, fetchProjectsObjects, fetchProjectTask, deleteProject, editProjectTitle};
+    return {addProject, fetchProjects, fetchProject, fetchProjectTasks, fetchProjectsObjects, fetchProjectTask, deleteProject, editProjectTitle};
 
 })();
 
@@ -62,6 +82,3 @@ export const tasks = (function () {
     return {addTask, deleteTask, editTask, changeTaskStatus}
 
 })();
-
-// TODO - How to make this more adherent to SOLID?
-// TODO make projects and tasks about crud, and the api about logic? But that creates dependency, at least api is currently only a proxy and each controller is independent-ish

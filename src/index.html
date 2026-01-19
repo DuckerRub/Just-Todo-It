@@ -10,10 +10,14 @@
     <div class ="container">
 
         <div class="workspace-selector" id="workspace-selector">
-                <form class="add-workspace-item" id="add-workspace-form">
-                    <input type="text" placeholder="Title" id="workspace-title-form">
-                    <button type="submit" id="submit-workspace-button">Add</button>
-                </form>
+            <!-- <div class="workspace-item" id="workspace-item">
+                <div id="workspace-item-title">Test</div>
+                <button id="workspace-item-button">Edit</button>
+            </div> -->
+            <form class="add-workspace-item" id="add-workspace-form">
+                <input type="text" placeholder="Title" id="workspace-title-form">
+                <button type="submit" id="submit-workspace-button">Add</button>
+            </form>
         </div>
 
         <div class="add-todo-component" id="add-todo-component">
@@ -21,8 +25,7 @@
             <form class="add-todo-component-form">
                     <div id="close-todo-form">X</div>
                     <input type="text" name="title" placeholder="Title" id="title-form" title="Title is mandatory">
-                    <textarea name="description" id="description-form" rows="5" cols="33">
-                    </textarea>
+                    <textarea name="description" id="description-form" rows="5" cols="33"></textarea>
                     <input type="date" name="duedate" placeholder="Duedate" id="duedate-form">
                     <select name="priority" id="priority-form">
                         <option value="low">Low</option>
@@ -38,7 +41,7 @@
         <div class="todo-list" id="todo-list">
         </div>
 
-        <button id="test-button">Test (currently clearing tasks)</button>
+        <button id="test-button">Test</button>
 
     </div>
 </body>

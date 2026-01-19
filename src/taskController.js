@@ -3,20 +3,15 @@ import {projectMethods} from "./projectController";
 
 class Task {
     constructor(title, description, duedate, priority) {
-        this.id = this.generateId();
+        this.id = this.#generateTaskId();
         this.title = title;
         this.description = description;
         this.duedate = format(duedate, "yyyy-MM-dd");
         this.priority = priority;
         this.taskStatus = false;
-        // TODO Add checklist last as a way to experience how easy it is to maintain your code
     }
 
-    getData(){
-        return this;
-    }
-
-    generateId () {
+    #generateTaskId () {
             return "TASK_" + self.crypto.randomUUID();
         };
 }

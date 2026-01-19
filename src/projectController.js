@@ -1,20 +1,31 @@
 class Project {
     constructor(title) {
-        this.id = this.generateProjectId();
+        this.id = this.#generateProjectId();
         this.title = title;
         this.tasks = [];
     }
 
-    countTasks () {
-        return this.tasks.length;
-    }
-    
-    generateProjectId () {
+    #generateProjectId () {
             return "PROJECT_" + self.crypto.randomUUID();
     };
+    
 }
 
 export const projectMethods = (function () {
+
+    const fetchProjects = function (){
+        const projects = Object.keys(localStorage);
+        return projects;
+    }
+
+    const fetchProject = function (projectId){
+        const storedProject = localStorage.getItem(projectId);
+        if (!storedProject) {
+            console.log("Project doesn't exist");
+            return null;
+        }
+        return JSON.parse(storedProject);
+    }
     
     const addProject = function (title) {
         const project = new Project(title);
@@ -30,47 +41,13 @@ export const projectMethods = (function () {
         }
     }
 
-    const editProjectTitle = function(projectId, newTitle){
-        const project = JSON.parse(localStorage.getItem(projectId));
-        if (!project) {
-            console.log("Project doesn't exist")
-        }else {
-            project.title = newTitle;
-            localStorage.setItem(projectId, JSON.stringify(project));
-        }
-    }
-
-    const fetchProject = function (projectId){
-        const storedProject = localStorage.getItem(projectId);
-        if (!storedProject) {
-            console.log("Project doesn't exist");
-            return null;
-        }
-        return JSON.parse(storedProject);
-    }
-
-    const fetchProjectTasks = function (projectId) {
+    const updateProject = function(projectId, projectObject){
         const project = fetchProject(projectId);
         if (!project) {
             console.log("Project doesn't exist")
         }else {
-            return project.tasks;
+            localStorage.setItem(projectId, JSON.stringify(projectObject));
         }
-    }
-
-    const fetchProjectTask = function (projectId, taskId) {
-        const project = fetchProject(projectId);
-        if (!project) {
-            console.log("Project doesn't exist")
-        }else {
-            const index = project.tasks.findIndex(e => e.id === taskId);
-            return project.tasks[index];
-        }
-    }
-    
-    const fetchProjects = function (){
-        const projects = Object.keys(localStorage);
-        return projects;
     }
     
     const addTaskToProject = function(projectId, taskObject){
@@ -83,15 +60,6 @@ export const projectMethods = (function () {
         }
     }
 
-    const updateProject = function(projectId, projectObject){
-        const project = fetchProject(projectId);
-        if (!project) {
-            console.log("Project doesn't exist")
-        }else {
-            localStorage.setItem(projectId, JSON.stringify(projectObject));
-        }
-    }
-
-    return {addProject, fetchProject, fetchProjectTasks, fetchProjectTask, fetchProjects, deleteProject, editProjectTitle, addTaskToProject, updateProject};
+    return {fetchProjects, fetchProject, addProject, deleteProject, updateProject, addTaskToProject };
     
 })();

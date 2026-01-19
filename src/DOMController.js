@@ -1,49 +1,30 @@
 import "./styles.css";
 import {tasks, projects} from "./api";
 
-// TODO my frontend is absolute dog shit
 
-export const DOMController = (function () {
 
-    const workspaceSelector = document.getElementById("workspace-selector");
-    const todoForm = document.querySelector(".add-todo-component-form");
-    const todoList = document.getElementById("todo-list");
+const DOMController = (function () {
+
     const container = document.querySelector(".container");
-    const addTodoForm = document.getElementById("add-todo-component");
+    const todoList = document.getElementById("todo-list");
     const viewCompleted = document.getElementById("view-completed-items");
-    
+    const addTodoForm = document.getElementById("add-todo-component");
+    const todoForm = document.querySelector(".add-todo-component-form");
+    const addWorkspaceForm = document.getElementById("submit-workspace-button");
 
     const getSelectedWorkspaceId = function () {
         const selectedProject = document.querySelector(".selectedWorkspace");
-        return selectedProject.dataset.projectId;
-    }
-
-    const addTodo = function () {
-        const projectId = getSelectedWorkspaceId();
-
-        const titleForm = document.getElementById("title-form");
-        const descriptionForm = document.getElementById("description-form");
-        const duedateForm = document.getElementById("duedate-form");
-        const priorityForm = document.getElementById("priority-form");
-
-        //create item
-        tasks.addTask(projectId, titleForm.value, descriptionForm.value, duedateForm.value, priorityForm.value);
-
-        //update screen
-        populateTodoList(projectId, false);
-
-        // clear form
-        titleForm.value = "";
-        descriptionForm.value = "";
-        duedateForm.value = "";
-        priorityForm.value = "low";
-        
-
+        if (selectedProject) {
+            return selectedProject.dataset.projectId;
+        } else {
+            console.log("Returned first project");
+            return projects.fetchProjects()[0];
+        }
     }
 
     const populateTodoList = function (projectId) {
 
-        const status = viewCompleted.dataset.completedStatus === "false" ? false : true;
+        const status = viewCompleted.dataset.showingCompleted === "false" ? false : true;
 
         const taskArrayUnfiltered = projects.fetchProjectTasks(projectId);
         const taskArray = taskArrayUnfiltered.filter(e => e.taskStatus === status);
@@ -90,34 +71,9 @@ export const DOMController = (function () {
 
     }
 
-    const changeTaskStatus = function (projectId, taskId) {
-        tasks.changeTaskStatus(projectId, taskId);
-        populateTodoList(projectId);
-    }
-
     const closeModal = function () {
         const modal = document.getElementById("modal");
         modal.remove();
-    }
-
-    const deleteTask = function (projectId, taskId) {
-        
-        tasks.deleteTask(projectId, taskId);
-        populateTodoList(projectId);
-        closeModal();
-    }
-
-    const editTask = function (projectId, taskId) {
-
-        const title = document.getElementById("title-modal");
-        const description = document.getElementById("description-modal");
-        const duedate = document.getElementById("duedate-modal");
-        const priority = document.getElementById("priority-modal");
-
-        tasks.editTask(projectId, taskId, title.value, description.value, duedate.value, priority.value);
-
-        //update screen
-        populateTodoList(projectId, false);
     }
 
     const openTaskModal = function (projectId, taskId) {
@@ -145,7 +101,6 @@ export const DOMController = (function () {
 
         const modalCompleteTodoAction = document.createElement("div");
         modalCompleteTodoAction.classList.add("complete-todo-action");
-        //TODO apply different styles based on completed status
         modalCompleteTodoAction.addEventListener("click", e => {
             e.stopPropagation();
             const projectId = !e.target.parentNode.dataset.projectId ? e.target.dataset.projectId : e.target.parentNode.dataset.projectId;
@@ -207,7 +162,15 @@ export const DOMController = (function () {
             e.stopPropagation();
             const projectId = !e.target.parentNode.dataset.projectId ? e.target.dataset.projectId : e.target.parentNode.dataset.projectId;
             const taskId = !e.target.parentNode.dataset.taskId ? e.target.dataset.taskId : e.target.parentNode.dataset.taskId;
-            editTask(projectId, taskId);
+
+            const title = document.getElementById("title-modal");
+            const description = document.getElementById("description-modal");
+            const duedate = document.getElementById("duedate-modal");
+            const priority = document.getElementById("priority-modal");
+
+            tasks.editTask(projectId, taskId, title.value, description.value, duedate.value, priority.value);
+
+            populateTodoList(projectId, false);
             closeModal();
         })
 
@@ -218,7 +181,9 @@ export const DOMController = (function () {
             e.stopPropagation();
             const projectId = !e.target.parentNode.dataset.projectId ? e.target.dataset.projectId : e.target.parentNode.dataset.projectId;
             const taskId = !e.target.parentNode.dataset.taskId ? e.target.dataset.taskId : e.target.parentNode.dataset.taskId;
-            deleteTask(projectId, taskId);
+            tasks.deleteTask(projectId, taskId);
+            populateTodoList(projectId);
+            closeModal();
         })
 
         modalContent.appendChild(modalCompleteTodoAction);
@@ -234,6 +199,74 @@ export const DOMController = (function () {
         container.append(modal);
 
         modal.style.display = "block"
+    }
+
+    const closeWorkspaceModal = function () {
+        const modal = document.getElementById("workspace-modal");
+        modal.remove();
+    }
+
+    const openWorkspaceModal = function (projectId) {
+        const project = projects.fetchProject(projectId);
+
+        const workspaceModal = document.createElement("div");
+        workspaceModal.classList.add("workspace-modal");
+        workspaceModal.classList.add("expanded");
+        workspaceModal.id = "workspace-modal";
+
+        const modalContent = document.createElement("div");
+        modalContent.classList.add("workspace-modal");
+        modalContent.id = "workspace-modal-content";
+        modalContent.dataset.projectId = projectId;
+
+        const modalClose = document.createElement("div");
+        modalClose.classList.add("workspace-item");
+        modalClose.id = "workspace-modal-close";
+        modalClose.textContent = "X"
+        modalClose.addEventListener("click", () => {
+            closeWorkspaceModal();
+        });
+
+        const modalTitle = document.createElement("input");
+        modalTitle.classList.add("workspace-modal-title");
+        modalTitle.type = "text";
+        modalTitle.value = project.title;
+        modalTitle.id = "workspace-modal-title";
+
+        const modalSaveButton= document.createElement("button");
+        modalSaveButton.classList.add("workspace-modal-save-button");
+        modalSaveButton.textContent = "Save and close";
+        modalSaveButton.addEventListener("click", e => {
+            e.stopPropagation();
+            const projectId = e.target.parentNode.dataset.projectId;
+            const title = document.getElementById("workspace-modal-title")
+            projects.editProjectTitle(projectId, title.value);
+            populateWorkspaceSelector();
+            switchSelectedWorkspace(projectId);
+            closeWorkspaceModal();
+        });
+
+        const modalDeleteButton= document.createElement("button");
+        modalDeleteButton.classList.add("workspace-modal-delete-button");
+        modalDeleteButton.textContent = "Delete workspace";
+        modalDeleteButton.addEventListener("click", e => {
+            e.stopPropagation();
+            projects.deleteProject(e.target.parentNode.dataset.projectId);
+            location.reload();
+        });
+
+        modalContent.appendChild(modalTitle);
+        modalContent.appendChild(modalClose);
+        modalContent.appendChild(modalDeleteButton);
+        modalContent.appendChild(modalSaveButton);
+
+        workspaceModal.appendChild(modalContent);
+
+        container.append(workspaceModal);
+
+        workspaceModal.style.display = "block"
+        
+        
     }
 
     const populateWorkspaceSelector = function () {
@@ -253,105 +286,136 @@ export const DOMController = (function () {
             const workspaceItem = document.createElement("div");
             workspaceItem.classList.add("workspace-item");
             workspaceItem.id = "workspace-item";
-            workspaceItem.textContent = e.title;
             workspaceItem.dataset.projectId = e.id;
             workspaceItem.addEventListener("click", e => {
-                // populateTodoList(e.id);
+                // e.stopPropagation();
+                const projectId = !e.target.dataset.projectId ? e.target.parentNode.dataset.projectId : e.target.dataset.projectId;
+                switchSelectedWorkspace(projectId);
+                if (e.target.id === "workspace-item-button") {
+                    openWorkspaceModal(projectId);
+                }
             })
+            const workspaceItemTitle = document.createElement("div");
+            workspaceItemTitle.id = "workspace-item-title";
+            workspaceItemTitle.textContent = e.title;
+            workspaceItem.appendChild(workspaceItemTitle);
+            const workspaceItemButton = document.createElement("button");
+            workspaceItemButton.id = "workspace-item-button";
+            workspaceItemButton.textContent = "Edit";
+            workspaceItem.appendChild(workspaceItemButton);
 
             workspaceSelector.prepend(workspaceItem);
         });
     }
 
-    const addWorkspace = function (title) {
-        const projectId = projects.addProject(title);
-        populateWorkspaceSelector();
-        const newProject = document.querySelector(`.workspace-item[data-project-id="${projectId}"]`)
-        newProject.classList.add("selectedWorkspace");
-    }
-
     const switchSelectedWorkspace = function (projectId) {
         const selectedProject = document.querySelector(".selectedWorkspace");
-        selectedProject.classList.remove("selectedWorkspace")
+        if (selectedProject) {
+            selectedProject.classList.remove("selectedWorkspace")
+        }
         populateTodoList(projectId);
         const newSelectedProject = document.querySelector(`.workspace-item[data-project-id="${projectId}"]`)
         newSelectedProject.classList.add("selectedWorkspace");
     }
 
-    workspaceSelector.addEventListener("click", e => {
-        //TODO too ugly and hardcoded
-        if (e.target.id === "workspace-selector") {
-            console.log("open selector")
-        } else if (e.target.id === "workspace-item") {
-            switchSelectedWorkspace(e.target.dataset.projectId);
-        } else if (e.target.id === "submit-workspace-button") {
-            e.preventDefault();
-            const projectTitle = document.getElementById("workspace-title-form");
-            addWorkspace(projectTitle.value);
-            projectTitle.value = "";
-        }
-    })
+    return {populateTodoList, openTaskModal, switchSelectedWorkspace, populateWorkspaceSelector, getSelectedWorkspaceId, todoList, viewCompleted, addTodoForm, todoForm, addWorkspaceForm};
 
-    // TODO separate event binding elsewhere, consider removing logic as well, what should a event binder do?
-    addTodoForm.addEventListener("click", () => {
+})();
+
+const eventHandler = (function () {
+
+    const addWorkspaceForm = function () {
+        const projectTitle = document.getElementById("workspace-title-form");
+        const projectId = projects.addProject(!projectTitle.value ? "Untitled" : projectTitle.value );
+        projectTitle.value = "";
+        DOMController.populateWorkspaceSelector();
+        DOMController.switchSelectedWorkspace(projectId);
+    };
+
+    const addTodoForm = function () {
         const cta = document.querySelector('.add-todo-component-cta');
         const closeTodoForm = document.getElementById("close-todo-form");
-        addTodoForm.classList.add("expanded");
+        DOMController.addTodoForm.classList.add("expanded");
         cta.classList.add("hidden-cta");
+
         closeTodoForm.addEventListener("click", e => {
             e.stopPropagation();
             cta.classList.remove("hidden-cta");
-            addTodoForm.classList.remove("expanded");
-        })
-    })
+            DOMController.addTodoForm.classList.remove("expanded");
+        });
+        
+    }
 
-    todoForm.addEventListener("submit", e => {
-        e.preventDefault();
-        addTodo();
+    const todoForm = function () {
+
+        const projectId = DOMController.getSelectedWorkspaceId();
+
+        const titleForm = document.getElementById("title-form");
+        const descriptionForm = document.getElementById("description-form");
+        const duedateForm = document.getElementById("duedate-form");
+        const priorityForm = document.getElementById("priority-form");
+        tasks.addTask(projectId, titleForm.value, descriptionForm.value, duedateForm.value, priorityForm.value);
+        DOMController.populateTodoList(projectId, false);
+        titleForm.value = "";
+        descriptionForm.value = "";
+        duedateForm.value = "";
+        priorityForm.value = "low";
+
         const cta = document.querySelector('.add-todo-component-cta.hidden-cta');
         const addTodoForm = document.querySelector(".add-todo-component.expanded");
         cta.classList.remove("hidden-cta");
         addTodoForm.classList.remove("expanded");
-    });
+    };
 
-    todoList.addEventListener("click", e => {
+    const todoList = function (e) {
         const projectId = !e.target.parentNode.dataset.projectId ? e.target.dataset.projectId : e.target.parentNode.dataset.projectId;
         const taskId = !e.target.parentNode.dataset.taskId ? e.target.dataset.taskId : e.target.parentNode.dataset.taskId;
-        //TODO improve this if, and questions if this is really the way to go
         if (e.target.classList.contains("complete-todo-action")) {
-            changeTaskStatus(projectId, taskId);
+            tasks.changeTaskStatus(projectId, taskId);
+            DOMController.populateTodoList(projectId);
         } else {
-            openTaskModal(projectId, taskId);
+            DOMController.openTaskModal(projectId, taskId);
         }
-    });
+    };
 
-    viewCompleted.addEventListener("click", () => {
-        //TODO very brittle
-        const status = viewCompleted.dataset.completedStatus === "false" ? false : true;
-        
-        viewCompleted.dataset.completedStatus = !status;
-        populateTodoList(getSelectedWorkspaceId());
-        if (status === false) {
-            viewCompleted.textContent = "View uncompleted task";
-        } else {
-            viewCompleted.textContent = "View completed task";
-        }
-        
-    });
+    const viewCompleted = function () {
 
+        const isShowingCompleted = DOMController.viewCompleted.dataset.showingCompleted === "true";
+        DOMController.viewCompleted.dataset.showingCompleted = !isShowingCompleted;
+        DOMController.populateTodoList(DOMController.getSelectedWorkspaceId());
+        DOMController.viewCompleted.textContent = isShowingCompleted 
+            ? "View completed tasks" 
+            : "View uncompleted tasks";
+    };
 
-    return {populateTodoList, populateWorkspaceSelector, getSelectedWorkspaceId};
+    return {addTodoForm, todoForm, todoList, viewCompleted, addWorkspaceForm}
 
 })();
 
-// Initialize default project
+const eventBinder = (function () {
+
+    DOMController.addWorkspaceForm.addEventListener("click", e => {
+        e.preventDefault();
+        eventHandler.addWorkspaceForm()
+    });
+    DOMController.addTodoForm.addEventListener("click", eventHandler.addTodoForm);
+    DOMController.todoForm.addEventListener("submit", e => {
+        e.preventDefault();
+        eventHandler.todoForm()});
+    DOMController.todoList.addEventListener("click", eventHandler.todoList);
+    DOMController.viewCompleted.addEventListener("click", eventHandler.viewCompleted);
+})();
+
+// Initialize project
 export const initialSetup = function () {
     if (projects.fetchProjects().length === 0) {
+        // Makes sure there's at least a default workspace created
             projects.addProject("My workspace");
         }
     DOMController.populateWorkspaceSelector();
     const selectedProject = document.querySelector(".workspace-item");
-    selectedProject.classList.add("selectedWorkspace")
+    selectedProject.classList.add("selectedWorkspace");
+    DOMController.viewCompleted.dataset.showingCompleted = "false";
     DOMController.populateTodoList(DOMController.getSelectedWorkspaceId());
 };
 
@@ -359,12 +423,4 @@ export const initialSetup = function () {
 const button = document.getElementById("test-button");
 button.addEventListener("click", () => {
     console.log("listener working");
-    localStorage.setItem(getSelectedWorkspaceId(), JSON.stringify({
-        id: getSelectedWorkspaceId(),
-        title:"My workspace",
-        tasks:[]
-    }));
 })
-
-// TODOs
-// Workspace selector
