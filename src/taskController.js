@@ -2,13 +2,14 @@ import { format } from "date-fns";
 import {projectMethods} from "./projectController";
 
 class Task {
-    constructor(title, description, duedate, priority) {
+    constructor(title, description, duedate, priority, excitmentLevel) {
         this.id = this.#generateTaskId();
         this.title = title;
         this.description = description;
         this.duedate = format(duedate, "yyyy-MM-dd");
         this.priority = priority;
         this.taskStatus = false;
+        this.excitmentLevel = excitmentLevel;
     }
 
     #generateTaskId () {
@@ -18,8 +19,8 @@ class Task {
 
 export const taskMethods = (function () {
 
-    const addTask = function (projectId, title, description = "", duedate = new Date(), priority = "") {
-        const task = new Task (title, description, duedate, priority);
+    const addTask = function (projectId, title, description = "", duedate = new Date(), priority = "", excitmentLevel = 0) {
+        const task = new Task (title, description, duedate, priority, excitmentLevel);
         projectMethods.addTaskToProject(projectId, task);
     }
 
@@ -34,7 +35,7 @@ export const taskMethods = (function () {
     }
 
 
-    const editTask = function (projectId, taskId, title, description = "", duedate = "", priority = "") {
+    const editTask = function (projectId, taskId, title, description = "", duedate = "", priority = "", excitmentLevel = 0) {
         const project = projectMethods.fetchProject(projectId);
         if (!project) {
             console.log("Project doesn't exist");
@@ -50,6 +51,7 @@ export const taskMethods = (function () {
         project.tasks[index].description = description;
         project.tasks[index].duedate = format(duedate, "yyyy-MM-dd");
         project.tasks[index].priority = priority;
+        project.tasks[index].excitmentLevel = excitmentLevel;
         projectMethods.updateProject(projectId, project);
     }
 

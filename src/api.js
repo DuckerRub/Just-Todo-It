@@ -63,16 +63,16 @@ export const projects = (function () {
 
 export const tasks = (function () {
 
-    const addTask = function (projectId, title, description, duedate, priority) {
-        taskMethods.addTask(projectId, title, description, duedate, priority);
+    const addTask = function (projectId, title, description, duedate, priority, excitmentLevel) {
+        taskMethods.addTask(projectId, title, description, duedate, priority, excitmentLevel);
     }
 
     const deleteTask = function (projectId, taskId) {
         taskMethods.deleteTask(projectId, taskId)
     }
 
-    const editTask = function (projectId, taskId, title, description, duedate, priority) {
-        taskMethods.editTask(projectId, taskId, title, description, duedate, priority)
+    const editTask = function (projectId, taskId, title, description, duedate, priority, excitmentLevel) {
+        taskMethods.editTask(projectId, taskId, title, description, duedate, priority, excitmentLevel)
     }
 
     const changeTaskStatus = function (projectId, taskId) {
